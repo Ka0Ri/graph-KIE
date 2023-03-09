@@ -5,11 +5,11 @@ import torch
 import torch_geometric.data
 from graph import Grapher
 from tqdm import tqdm
-from bpemb import BPEmb
+# from bpemb import BPEmb
 from sentence_transformers import SentenceTransformer
 from torch_geometric.utils.convert import from_networkx
 
-bpemb = BPEmb(lang='en')
+# bpemb = BPEmb(lang='en')
 sent_model = SentenceTransformer('distilbert-base-nli-stsb-mean-tokens')
 
 
@@ -27,8 +27,8 @@ def get_data(save_fd):
         - y (Tensor, optional) – Graph or node targets with arbitrary shape. (default: None)
         - validation mask, training mask and testing mask
     """
-    data_fd = '../dataset/sroie-2019'
-    path = '../dataset/sroie-2019/raw/box'
+    data_fd = 'dataset'
+    path = 'dataset/raw/box'
     files = [i.split('.')[0] for i in os.listdir(path)]
     files.sort()
     all_files = files[1:]
@@ -40,7 +40,8 @@ def get_data(save_fd):
     random.shuffle(files)
 
     # Get 550 receipts for training
-    training, testing = files[:550], files[550:]
+    n = len(files)
+    training, testing = files[:int(n * 0.8)], files[int(n * 0.8):]
 
     for file in tqdm(all_files):
         connect = Grapher(file, data_fd)
@@ -98,5 +99,5 @@ def get_data(save_fd):
     torch.save(test_data, os.path.join(save_fd, 'test_data.dataset'))
 
 
-get_data(save_fd='../dataset/sroie-2019/processed')
+get_data(save_fd='dataset/processed')
 

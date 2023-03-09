@@ -1,6 +1,6 @@
 import torch
 import torch.nn.functional as F
-from dgl.nn.pytorch import ChebConv
+# from dgl.nn.pytorch import ChebConv
 from torch_geometric.nn import GCNConv
 
 
@@ -23,15 +23,16 @@ class InvoiceGCN(torch.nn.Module):
         self.dropout_rate = dropout_rate
 
         if chebnet:
-            self.conv1 = ChebConv(self.input_dim, 64, k=K)
-            self.conv2 = ChebConv(64, 32, k=K)
-            self.conv3 = ChebConv(32, 16, k=K)
-            self.conv4 = ChebConv(16, self.n_classes, k=K)
+            # self.conv1 = ChebConv(self.input_dim, 64, k=K)
+            # self.conv2 = ChebConv(64, 32, k=K)
+            # self.conv3 = ChebConv(32, 16, k=K)
+            # self.conv4 = ChebConv(16, self.n_classes, k=K)
+            pass
         else:
-            self.conv1 = GCNConv(self.input_dim, 64, improved=True, cached=True)
-            self.conv2 = GCNConv(64, 32, improved=True, cached=True)
-            self.conv3 = GCNConv(32, 16, improved=True, cached=True)
-            self.conv4 = GCNConv(16, self.n_classes, improved=True, cached=True)
+            self.conv1 = GCNConv(self.input_dim, 64, improved=True)
+            self.conv2 = GCNConv(64, 32, improved=True)
+            self.conv3 = GCNConv(32, 16, improved=True)
+            self.conv4 = GCNConv(16, self.n_classes, improved=True)
 
     def forward(self, data):
         # for transductive setting with full-batch update
